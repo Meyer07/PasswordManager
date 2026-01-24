@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import encryptionUtils from '../utils/encryption';
 import validation from '../utils/validation';
 import storageService from '../services/storage';
@@ -7,13 +7,7 @@ const usePasswordManager = (masterPassword) => {
   const [passwords, setPasswords] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (masterPassword) {
-      loadPasswords();
-    }
-  }, [masterPassword]);
-
-  const loadPasswords = async () => {
+  const loadPasswords = useCallback(async () => {
     setIsLoading(true);
     try {
       const encrypted = storageService.getEncryptedPasswords();
@@ -33,7 +27,13 @@ const usePasswordManager = (masterPassword) => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [masterPassword]);
+
+  useEffect(() => {
+    if (masterPassword) {
+      loadPasswords();
+    }
+  }, [masterPassword, loadPasswords]);
 
   const savePasswords = async (updatedPasswords) => {
     try {
