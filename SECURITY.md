@@ -222,7 +222,7 @@ const encrypted = await crypto.subtle.encrypt(
 If you discover a security vulnerability in this project:
 
 1. **DO NOT** open a public GitHub issue
-2. Email security concerns to: [your-email@example.com]
+2. Email security concerns to: [smeyer1@new.rr.com]
 3. Include:
    - Description of the vulnerability
    - Steps to reproduce
