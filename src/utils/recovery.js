@@ -50,7 +50,7 @@ const recoveryUtils=
             return{valid:true};
         }catch(error)
         {
-            return{valid:false,error:"Invalid recovery key format:",error};
+            return{valid:false,error:"Invalid recovery key format:"};
         }
     }
 
