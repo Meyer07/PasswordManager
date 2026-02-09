@@ -1,7 +1,7 @@
 import encryptionUtils from './encryption';
 
 
-const recoveryKey=
+const recoveryUtils=
 {
     generateRecoveryKey:()=>
     {

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Key,AlertCircle,Loader2,Shield} from 'lucide-react';
 
-const recoveryScreen=({onRecover,onCancel,error,isLoading})=>
+const RecoveryScreen=({onRecover,onCancel,error,isLoading})=>
 {
     const [recoveryKey,setRecoveryKey]=useState('');
 

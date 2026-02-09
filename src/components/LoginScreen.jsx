@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Lock, Shield, AlertCircle, Loader2 } from 'lucide-react';
 
-const LoginScreen = ({ onUnlock, error, isLoading }) => {
+const LoginScreen = ({ onUnlock, error, isLoading, onShowRecovery }) => {
   const [password, setPassword] = useState('');
 
   const handleSubmit = async () => {
@@ -74,6 +74,15 @@ const LoginScreen = ({ onUnlock, error, isLoading }) => {
               <li>• PBKDF2 key derivation (100k iterations)</li>
               <li>• Minimum 12 character master password</li>
             </ul>
+          </div>
+
+          <div className="pt-4 border-t border-slate-700">
+            <button
+              onClick={onShowRecovery}
+              className="w-full text-slate-400 hover:text-white text-sm transition-colors"
+            >
+              Forgot your master password? Use recovery key →
+            </button>
           </div>
         </div>
       </div>

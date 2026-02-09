@@ -2,9 +2,9 @@ import React, {useState} from 'react';
 import {Download,Copy,AlertTriangle,Check} from 'lucide-react';
 
 
-const recoveryDisplay=({recoveryKey,onConfirm})=>
+const RecoveryKeyDisplay=({recoveryKey,onConfirm})=>
 {
-    const [copied, setCoped]=useState(false);
+    const [copied, setCopied]=useState(false);
     const [downloaded,setDownloaded]=useState(false);
     const [confirmed,setConfirmed]=useState(false);
 
@@ -23,7 +23,7 @@ const recoveryDisplay=({recoveryKey,onConfirm})=>
         const url = URL.createObjectURL(blob);
         const a=document.createElement('a');
         a.href=url;
-        a.download='password-manager-recovery-key-${Date.now()}.txt';
+        a.download=`password-manager-recovery-key-${Date.now()}.txt`;
         a.click()
         URL.revokeObjectURL(url);
         setDownloaded(true);
