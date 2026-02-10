@@ -152,7 +152,7 @@ If you suspect your master password has been compromised:
 | Cloud Sync | ❌ No | ✅ Yes (encrypted) |
 | Browser Integration | ❌ Limited | ✅ Full |
 | Security Audits | ❌ No | ✅ Regular |
-| Recovery Options | ❌ None | ✅ Multiple |
+| Recovery Options | ✅ Recovery Key | ✅ Multiple |
 
 ### Educational Purpose
 
