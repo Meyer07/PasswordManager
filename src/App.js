@@ -8,6 +8,7 @@ import NewMasterPasswordScreen from './components/NewMasterPasswordScreen';
 import Header from './components/Header';
 import AddPasswordForm from './components/AddPasswordForm';
 import PasswordList from './components/PasswordList';
+import VaultAudit from './components/VaultAudit';
 
 const App = () => {
   const { 
@@ -32,6 +33,7 @@ const App = () => {
   const [formError, setFormError] = useState('');
   const [formLoading, setFormLoading] = useState(false);
   const [recoveryState, setRecoveryState] = useState(null); // For storing recovered hash
+  const [showAudit, setShowAudit] = useState(false);
 
   const handleAddPassword = async (entry) => {
     setFormLoading(true);
@@ -118,6 +120,7 @@ const App = () => {
             passwordCount={passwords.length}
             onLock={handleLock}
             onAddNew={() => setShowForm(!showForm)}
+            onAudit={() => setShowAudit(true)}
           />
 
           {showForm && (
@@ -141,6 +144,13 @@ const App = () => {
           </div>
         </div>
       </div>
+
+      {showAudit && (
+        <VaultAudit
+          passwords={passwords}
+          onClose={() => setShowAudit(false)}
+        />
+      )}
     </div>
   );
 };

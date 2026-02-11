@@ -1,7 +1,7 @@
 import React from 'react';
-import { Plus, Lock, Shield } from 'lucide-react';
+import { Plus, Lock, Shield, Search } from 'lucide-react';
 
-const Header = ({ passwordCount, onLock, onAddNew }) => {
+const Header = ({ passwordCount, onLock, onAddNew, onAudit }) => {
   return (
     <div className="p-6 border-b border-slate-700 flex items-center justify-between">
       <div className="flex items-center gap-3">
@@ -18,18 +18,26 @@ const Header = ({ passwordCount, onLock, onAddNew }) => {
 
       <div className="flex gap-2">
         <button
+          onClick={onAudit}
+          className="bg-yellow-600 hover:bg-yellow-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
+          title="Security Audit"
+        >
+          <Search className="w-5 h-5" />
+          <span className="hidden sm:inline">Audit</span>
+        </button>
+        <button
           onClick={onAddNew}
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
         >
           <Plus className="w-5 h-5" />
-          Add Password
+          <span className="hidden sm:inline">Add Password</span>
         </button>
         <button
           onClick={onLock}
           className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg transition-colors flex items-center gap-2"
         >
           <Lock className="w-5 h-5" />
-          Lock
+          <span className="hidden sm:inline">Lock</span>
         </button>
       </div>
     </div>

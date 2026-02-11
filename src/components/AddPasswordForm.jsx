@@ -1,10 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Key, AlertCircle, Loader2 } from 'lucide-react';
 import passwordGenerator from '../utils/passwordGenerator';
+import breachCheckUtils from '../utils/breachCheck';
+import BreachIndicator from './BreachIndicator';
 
 const AddPasswordForm = ({ onAdd, onCancel, error, isLoading }) => {
   const [entry, setEntry] = useState({ site: '', username: '', password: '' });
   const [strength, setStrength] = useState(0);
+  const [breachStatus, setBreachStatus] = useState(null);
+  const [checkingBreach, setCheckingBreach] = useState(false);
+
+  // Check for breaches when password changes (debounced)
+  useEffect(() => {
+    if (!entry.password || entry.password.length < 4) {
+      setBreachStatus(null);
+      return;
+    }
+
+    const timer = setTimeout(async () => {
+      setCheckingBreach(true);
+      const result = await breachCheckUtils.checkPassword(entry.password);
+      setBreachStatus(result);
+      setCheckingBreach(false);
+    }, 500); // Debounce 500ms
+
+    return () => clearTimeout(timer);
+  }, [entry.password]);
 
   const handlePasswordChange = (password) => {
     setEntry({ ...entry, password });
@@ -73,6 +94,10 @@ const AddPasswordForm = ({ onAdd, onCancel, error, isLoading }) => {
                 </div>
                 <span className="text-xs text-slate-400 w-20">{strengthLabels[strength - 1]}</span>
               </div>
+              {checkingBreach && (
+                <p className="text-xs text-slate-400 mt-1">Checking breach database...</p>
+              )}
+              <BreachIndicator breachStatus={breachStatus} />
             </div>
           )}
         </div>
