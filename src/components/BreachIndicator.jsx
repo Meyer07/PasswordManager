@@ -2,7 +2,7 @@ import React from 'react'
 import {Shield,AlertTriangle,CheckCircle} from 'lucide-react'
 
 
-const BreachIndicator=([breachStatus])=>
+const BreachIndicator=({breachStatus})=>
 {
     if(!breachStatus) return null;
 
@@ -24,7 +24,7 @@ const BreachIndicator=([breachStatus])=>
                     <div>
                         <p className='font-semibold'>⚠️ Password Compromised</p>
                         <p className="text-red-300">
-                            Found in {breachStatus.count.toLocaleString()} data breaches. 
+                            Found in {breachStatus.count?.toLocaleString() || 0} data breaches. 
                             Change this password immediately!
                         </p>
                     </div>
