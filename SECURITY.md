@@ -244,7 +244,7 @@ Planned improvements:
 - [ ] Auto-lock after inactivity
 - [ ] Biometric authentication (WebAuthn)
 - [ ] Encrypted export/import
-- [ ] Password breach checking (HaveIBeenPwned API)
+- [✅] Password breach checking (HaveIBeenPwned API)
 - [ ] Session timeout
 - [ ] Clipboard auto-clear
 - [ ] Password history
@@ -263,5 +263,5 @@ This security documentation is part of the Password Manager project and is provi
 
 ---
 
-**Last Updated**: January 2025  
+**Last Updated**: February 2026  
 **Version**: 1.0.0
