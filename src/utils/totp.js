@@ -106,4 +106,18 @@ const totpUtils=
             return { code: '000000', timeRemaining: 0, error: true };
         }
     },
+
+    generateQRCodeURL:(secret,accountName,issuer="Password Manager")=>
+    {
+        const label=encodeURIComponent(`${issuer}:${accountName}`);
+        const params=new URLSearchParams({
+            secret:secret,
+            issuer:issuer,
+            algorithm:'SHA1',
+            digits:'6',
+            period:'30'
+        });
+
+        return `otpauth://totp/${label}?${params.toString()}`;
+    },
 }
