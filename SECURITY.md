@@ -64,7 +64,6 @@ Plaintext Data → AES-256-GCM Encryption → Encrypted Data
 - **Physical access**: Someone with access to your unlocked device
 - **Memory dumps**: Passwords exist in plaintext in memory while vault is unlocked
 - **Phishing**: Users entering master password on fake sites
-- **Master password loss**: No recovery mechanism exists (by design - zero-knowledge architecture)
 
 ## Threat Model
 
