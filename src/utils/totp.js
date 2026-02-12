@@ -106,5 +106,4 @@ const totpUtils=
             return { code: '000000', timeRemaining: 0, error: true };
         }
     },
-    
 }
