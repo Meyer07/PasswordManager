@@ -28,7 +28,7 @@ const TOTPSetupModal = ({ accountName, onSave, onCancel }) => {
       return;
     }
 
-    const isValid = await totpUtils.verifyTOTP(secret, verificationCode);
+    const isValid = await totpUtils.verifyTOTPCode(secret, verificationCode);
     
     if (isValid) {
       onSave(secret);

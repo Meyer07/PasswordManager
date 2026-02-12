@@ -28,7 +28,7 @@ const App = () => {
     cancelRecovery
   } = useAuth();
   
-  const { passwords, isLoading: vaultLoading, addPassword, deletePassword } = usePasswordManager(masterPassword);
+  const { passwords, isLoading: vaultLoading, addPassword, deletePassword, updatePassword } = usePasswordManager(masterPassword);
   const [showForm, setShowForm] = useState(false);
   const [formError, setFormError] = useState('');
   const [formLoading, setFormLoading] = useState(false);
@@ -139,6 +139,7 @@ const App = () => {
             <PasswordList 
               passwords={passwords} 
               onDelete={deletePassword}
+              onUpdate={updatePassword}
               isLoading={vaultLoading}
             />
           </div>

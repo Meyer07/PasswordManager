@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Lock, Loader2 } from 'lucide-react';
 import PasswordItem from './PasswordItem';
 
-const PasswordList = ({ passwords, onDelete, isLoading }) => {
+const PasswordList = ({ passwords, onDelete, onUpdate, isLoading }) => {
   const [visiblePasswords, setVisiblePasswords] = useState({});
 
   const toggleVisibility = (id) => {
@@ -35,6 +35,7 @@ const PasswordList = ({ passwords, onDelete, isLoading }) => {
           key={entry.id}
           entry={entry}
           onDelete={onDelete}
+          onUpdate={onUpdate}
           isVisible={visiblePasswords[entry.id]}
           onToggleVisibility={() => toggleVisibility(entry.id)}
         />
