@@ -120,4 +120,38 @@ const totpUtils=
 
         return `otpauth://totp/${label}?${params.toString()}`;
     },
-}
+
+    verifyTOTPCode:async (secret,code,window=1)=>
+    {
+        for(let i=-window;i<=window;i++)
+        {
+            const time=Math.floor(Date.now()/1000)+(i*30);
+            const timeCounter=Math.floor(time/30);
+
+            const buffer= new ArrayBuffer(8);
+            const view = new DataView(buffer);
+
+            view.setUint32(4,timeCounter,false);
+
+            const key=totpUtils.base32Decode(secret);
+            const hmac = await totpUtilsl.hmacSha1(key,new Uint8Array(buffer));
+
+            const offset = hmac[hmac.length - 1] & 0x0f;
+            const generatedCode = (
+                ((hmac[offset] & 0x7f) << 24) |
+                ((hmac[offset + 1] & 0xff) << 16) |
+                ((hmac[offset + 2] & 0xff) << 8) |
+                (hmac[offset + 3] & 0xff)
+            )
+
+            const otp=(generatedCode % 1000000).toString().padStart(6, '0');
+
+            if(otp===code)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+export default totpUtils;
