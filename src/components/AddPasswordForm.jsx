@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Key, AlertCircle, Loader2 } from 'lucide-react';
+import { Key, AlertCircle, Loader2, Smartphone } from 'lucide-react';
 import passwordGenerator from '../utils/passwordGenerator';
 import breachCheckUtils from '../utils/breachCheck';
 import BreachIndicator from './BreachIndicator';
+import TOTPSetupModal from './totpSetupModal';
 
 const AddPasswordForm = ({ onAdd, onCancel, error, isLoading }) => {
-  const [entry, setEntry] = useState({ site: '', username: '', password: '' });
+  const [entry, setEntry] = useState({ site: '', username: '', password: '', totpSecret: '' });
   const [strength, setStrength] = useState(0);
   const [breachStatus, setBreachStatus] = useState(null);
   const [checkingBreach, setCheckingBreach] = useState(false);
+  const [showTOTPSetup, setShowTOTPSetup] = useState(false);
 
   // Check for breaches when password changes (debounced)
   useEffect(() => {
@@ -39,6 +41,11 @@ const AddPasswordForm = ({ onAdd, onCancel, error, isLoading }) => {
 
   const handleSubmit = async () => {
     await onAdd(entry);
+  };
+
+  const handleTOTPSave = (secret) => {
+    setEntry({ ...entry, totpSecret: secret });
+    setShowTOTPSetup(false);
   };
 
   const strengthColors = ['bg-red-500', 'bg-orange-500', 'bg-yellow-500', 'bg-lime-500', 'bg-green-500'];
@@ -99,6 +106,37 @@ const AddPasswordForm = ({ onAdd, onCancel, error, isLoading }) => {
               )}
               <BreachIndicator breachStatus={breachStatus} />
             </div>
+          )}
+        </div>
+
+        {/* 2FA Setup */}
+        <div>
+          <label className="block text-sm font-medium text-slate-300 mb-2">
+            Two-Factor Authentication (Optional)
+          </label>
+          {entry.totpSecret ? (
+            <div className="bg-green-900/30 border border-green-700 rounded-lg p-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Smartphone className="w-4 h-4 text-green-400" />
+                <span className="text-green-200 text-sm">2FA Enabled</span>
+              </div>
+              <button
+                onClick={() => setEntry({ ...entry, totpSecret: '' })}
+                className="text-red-400 hover:text-red-300 text-sm transition-colors"
+              >
+                Remove
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setShowTOTPSetup(true)}
+              disabled={isLoading || !entry.site}
+              className="w-full bg-slate-700 hover:bg-slate-600 disabled:opacity-50 text-white px-4 py-2 rounded-lg transition-colors flex items-center justify-center gap-2"
+            >
+              <Smartphone className="w-4 h-4" />
+              Set Up 2FA
+            </button>
           )}
         </div>
 
