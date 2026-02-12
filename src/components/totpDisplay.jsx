@@ -7,23 +7,73 @@ const TOTPDisplay=({secret})=>
     const [totp,setTOTP]=useState({ code: '------', timeRemaining: 30 });
     const [copied,setCopied]=useState(false);
 
-    useEffect()=>
+    useEffect(()=>
     {
         if(!secret)
         {
             return true;
         }
-    }
+        const updateTOTP=async()=>
+            {
+                const result=await totpUtils.generateTOTP(secret);
+                setTOTP(result);
+            }
+        
+            updateTOTP();
+        
+            const interval=setInterval(updateTOTP,1000);
+        
+            return ()=>clearInterval(interval);
+    },[secret])
 
-    const updateTOTP=async()=>
+    const copyCode=()=>
     {
-        const result=await totpUtils.generateTOTP(secret);
-        setTOTP(result);
-    }
+        navigator.clipboard.writeText(totp.code);
+        setCopied(true);
+        setTimeout(()=>setCopied(false),2000);
+    };
 
-    updateTOTP();
+    const progressPercent=(totp.timeRemaining/30)*100;
+    const isExpiring=totp.timeRemaining<=5;
 
-    const interval=setInterval(updateTOTP,1000);
+    return(
+        <div className="bg-slate-800 border border-slate-600 rounded-lg p-3 mt-2">
+        <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-2">
+          <Clock className="w-4 h-4 text-slate-400" />
+          <span className="text-xs text-slate-400">2FA Code</span>
+        </div>
+        <div className={`text-xs font-mono ${isExpiringSoon ? 'text-yellow-400' : 'text-slate-400'}`}>
+          {totp.timeRemaining}s
+        </div>
+        </div>
 
-    return ()=>clearInterval(interval);
-},{secret};
+      <div className="flex items-center gap-2">
+        <div className="flex-1 bg-slate-700 rounded px-3 py-2">
+          <code className={`text-2xl font-bold tracking-wider ${isExpiringSoon ? 'text-yellow-400' : 'text-white'}`}>
+            {totp.code}
+          </code>
+        </div>
+        <button
+          onClick={copyCode}
+          className={`p-2 ${copied ? 'bg-green-600' : 'bg-blue-600 hover:bg-blue-700'} text-white rounded-lg transition-colors`}
+          title={copied ? 'Copied!' : 'Copy code'}
+        >
+          {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+        </button>
+      </div>
+
+      {/* Progress bar */}
+      <div className="mt-2 bg-slate-700 rounded-full h-1 overflow-hidden">
+        <div
+          className={`h-full transition-all duration-1000 ${isExpiringSoon ? 'bg-yellow-500' : 'bg-blue-500'}`}
+          style={{ width: `${progressPercentage}%` }}
+        />
+      </div>
+    </div>
+  );
+
+   
+};
+
+export default TOTPDisplay;
