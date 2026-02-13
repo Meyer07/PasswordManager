@@ -25,11 +25,38 @@ const useAuth = () => {
         return false;
       }
 
-      const storedHash = storageService.getMasterHash();
+      // CRITICAL FIX: Always read fresh from localStorage to avoid stale state
+      const storedHash = localStorage.getItem('pm_master_hash_v2');
+      
+      // DEBUG: Log what we're seeing
+      console.log('🔍 Auth Debug:', {
+        hasStoredHash: !!storedHash,
+        storedHashPreview: storedHash?.substring(0, 20) + '...',
+        allKeys: Object.keys(localStorage)
+      });
+
       const currentHash = await encryptionUtils.hashPassword(password);
 
       if (!storedHash) {
+        // SAFETY CHECK: Double-check localStorage before creating new account
+        const doubleCheck = localStorage.getItem('pm_master_hash_v2');
+        if (doubleCheck) {
+          console.warn('⚠️ Hash appeared on second check! Using it.');
+          // Retry with the hash that just appeared
+          if (doubleCheck === currentHash) {
+            setMasterPassword(password);
+            setIsUnlocked(true);
+            setIsLoading(false);
+            return true;
+          } else {
+            setError('Incorrect master password');
+            setIsLoading(false);
+            return false;
+          }
+        }
+
         // First time setup - generate recovery key
+        console.log('✨ First time setup - creating new account');
         storageService.saveMasterHash(currentHash);
         
         // Generate and save recovery key
@@ -43,16 +70,19 @@ const useAuth = () => {
         setIsLoading(false);
         return true;
       } else if (storedHash === currentHash) {
+        console.log('✅ Hash matched - unlocking vault');
         setMasterPassword(password);
         setIsUnlocked(true);
         setIsLoading(false);
         return true;
       } else {
+        console.log('❌ Hash mismatch - wrong password');
         setError('Incorrect master password');
         setIsLoading(false);
         return false;
       }
     } catch (err) {
+      console.error('Auth error:', err);
       setError('Authentication failed. Please try again.');
       setIsLoading(false);
       return false;
