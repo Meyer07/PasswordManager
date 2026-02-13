@@ -146,11 +146,11 @@ If you suspect your master password has been compromised:
 | Encryption | AES-256-GCM | AES-256-GCM |
 | Key Derivation | PBKDF2 (100k) | PBKDF2 (100k-650k) |
 | Zero-Knowledge | ✅ Yes | ✅ Yes |
-| 2FA | ❌ No | ✅ Yes |
+| 2FA | ✅ Yes | ✅ Yes |
 | Biometric | ❌ No | ✅ Yes |
 | Cloud Sync | ❌ No | ✅ Yes (encrypted) |
 | Browser Integration | ❌ Limited | ✅ Full |
-| Security Audits | ❌ No | ✅ Regular |
+| Security Audits | ✅ Yes | ✅ Regular |
 | Recovery Options | ✅ Recovery Key | ✅ Multiple |
 
 ### Educational Purpose
@@ -241,14 +241,14 @@ I will respond within 48 hours and work on a fix.
 ## Future Security Enhancements
 
 Planned improvements:
-- [ ] Auto-lock after inactivity
-- [ ] Biometric authentication (WebAuthn)
-- [ ] Encrypted export/import
-- [✅] Password breach checking (HaveIBeenPwned API)
-- [ ] Session timeout
-- [ ] Clipboard auto-clear
-- [ ] Password history
-- [ ] Two-factor authentication
+-[ ] Auto-lock after inactivity
+-[ ] Biometric authentication (WebAuthn)
+-[ ] Encrypted export/import
+-[✅] Password breach checking (HaveIBeenPwned API)
+-[ ] Session timeout
+-[ ] Clipboard auto-clear
+-[ ] Password history
+-[✅] Two-factor authentication
 
 ## References
 
