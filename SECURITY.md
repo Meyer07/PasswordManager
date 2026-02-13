@@ -241,14 +241,14 @@ I will respond within 48 hours and work on a fix.
 ## Future Security Enhancements
 
 Planned improvements:
--[ ] Auto-lock after inactivity
--[ ] Biometric authentication (WebAuthn)
--[ ] Encrypted export/import
--[✅] Password breach checking (HaveIBeenPwned API)
--[ ] Session timeout
--[ ] Clipboard auto-clear
--[ ] Password history
--[✅] Two-factor authentication
+- [ ] Auto-lock after inactivity
+- [ ] Biometric authentication (WebAuthn)
+- [ ] Encrypted export/import
+- [✅] Password breach checking (HaveIBeenPwned API)
+- [ ] Session timeout
+- [ ] Clipboard auto-clear
+- [ ] Password history
+- [✅] Two-factor authentication
 
 ## References
 

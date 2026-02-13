@@ -41,7 +41,7 @@ A secure password manager built with React and Web Crypto API.
 
 - [ ] Browser extension version
 - [ ] Biometric authentication (WebAuthn)
--[✅] Password breach checking (HaveIBeenPwned API)
+- [✅] Password breach checking (HaveIBeenPwned API)
 - [ ] Auto-logout after inactivity
--[✅] Encrypted backup/export
--[✅] Two-factor authentication
+- [✅] Encrypted backup/export
+- [✅] Two-factor authentication
