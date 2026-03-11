@@ -129,11 +129,7 @@ If you suspect your master password has been compromised:
 - Passwords exist in plaintext while vault is unlocked
 - Memory dumps or malware could potentially access this
 
-### 4. No Two-Factor Authentication
-- Master password is the only authentication factor
-- Future enhancement to consider
-
-### 5. No Auto-Lock
+### 4. No Auto-Lock
 - Vault remains unlocked until manually locked
 - Future enhancement to consider
 
