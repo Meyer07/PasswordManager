@@ -31,10 +31,10 @@ A secure password manager built with React and Web Crypto API.
 - ✅ Local storage theft (data is encrypted)
 - ✅ Memory dumps (minimal plaintext exposure)
 - ✅ Brute force attacks (PBKDF2 slows attempts)
+- ✅ Protects against XSS injection
 
 **What This Does NOT Protect Against:**
 - ❌ Keyloggers (can capture master password)
-- ❌ XSS attacks (if injected into the page)
 - ❌ Compromised browser environment
 
 ## Future Enhancements
@@ -42,6 +42,6 @@ A secure password manager built with React and Web Crypto API.
 - [ ] Browser extension version
 - [ ] Biometric authentication (WebAuthn)
 - [✅] Password breach checking (HaveIBeenPwned API)
-- [ ] Auto-logout after inactivity
-- [✅] Encrypted backup/export
+- [✅] Auto-logout after inactivity
+- [ ] Encrypted backup/export
 - [✅] Two-factor authentication

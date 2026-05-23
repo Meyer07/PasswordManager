@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import useAuth from './hooks/useAuth';
 import usePasswordManager from './hooks/usePasswordManager';
+import { useAutoLock } from './hooks/useAutoLock';
 import LoginScreen from './components/LoginScreen';
 import RecoveryScreen from './components/RecoveryScreen';
 import RecoveryKeyDisplay from './components/RecoveryKeyDisplay';
@@ -29,6 +30,7 @@ const App = () => {
   } = useAuth();
   
   const { passwords, isLoading: vaultLoading, addPassword, deletePassword, updatePassword } = usePasswordManager(masterPassword);
+  useAutoLock(isUnlocked,lock,0.5);
   const [showForm, setShowForm] = useState(false);
   const [formError, setFormError] = useState('');
   const [formLoading, setFormLoading] = useState(false);
@@ -53,8 +55,9 @@ const App = () => {
 
   const handleLock = () => {
     lock();
-    setShowForm(false);
-    setFormError('');
+    setShowForm(false); 
+    setShowAudit(false); 
+    setFormError(''); 
   };
 
   const handleRecover = async (userRecoveryKey) => {
