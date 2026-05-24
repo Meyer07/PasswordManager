@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import useAuth from './hooks/useAuth';
 import usePasswordManager from './hooks/usePasswordManager';
 import { useAutoLock } from './hooks/useAutoLock';
+import useSettings from './hooks/useSettings';
 import LoginScreen from './components/LoginScreen';
 import RecoveryScreen from './components/RecoveryScreen';
 import RecoveryKeyDisplay from './components/RecoveryKeyDisplay';
@@ -10,7 +11,9 @@ import Header from './components/Header';
 import AddPasswordForm from './components/AddPasswordForm';
 import PasswordList from './components/PasswordList';
 import VaultAudit from './components/VaultAudit';
+import SettingsPanel from './components/SettingsPanel';
 import Toast from './components/Toast';
+import backupUtils from './utils/backup';
 
 const App = () => {
   const { 
@@ -37,16 +40,20 @@ const App = () => {
     deletePassword, 
     updatePassword,
     importPasswords,
+    savePasswords,
   } = usePasswordManager(masterPassword);
 
-  useAutoLock(isUnlocked, lock, 0.5);
+  const { settings, updateSetting } = useSettings();
+
+  useAutoLock(isUnlocked, lock, settings.autoLockEnabled ? settings.autoLockTimeout : null);
 
   const [showForm, setShowForm] = useState(false);
   const [formError, setFormError] = useState('');
   const [formLoading, setFormLoading] = useState(false);
   const [recoveryState, setRecoveryState] = useState(null);
   const [showAudit, setShowAudit] = useState(false);
-  const [toast, setToast] = useState(null); // { message: string, type: 'success' | 'error' }
+  const [showSettings, setShowSettings] = useState(false);
+  const [toast, setToast] = useState(null);
 
   const showToast = useCallback((message, type = 'success') => {
     setToast({ message, type });
@@ -55,16 +62,13 @@ const App = () => {
   const handleAddPassword = async (entry) => {
     setFormLoading(true);
     setFormError('');
-    
     const result = await addPassword(entry);
-    
     if (result.success) {
       setShowForm(false);
       setFormError('');
     } else {
       setFormError(result.error);
     }
-    
     setFormLoading(false);
   };
 
@@ -72,6 +76,7 @@ const App = () => {
     lock();
     setShowForm(false);
     setShowAudit(false);
+    setShowSettings(false);
     setFormError('');
     setToast(null);
   };
@@ -85,9 +90,12 @@ const App = () => {
 
   const handleSetNewPassword = async (newPassword) => {
     const success = await setNewMasterPassword(newPassword, recoveryState);
-    if (success) {
-      setRecoveryState(null);
-    }
+    if (success) setRecoveryState(null);
+  };
+
+  // Restore from a localStorage snapshot — replaces the live vault after confirmation
+  const handleRestoreSnapshot = async (restoredPasswords) => {
+    await savePasswords(restoredPasswords);
   };
 
   // Show recovery key setup modal
@@ -130,6 +138,8 @@ const App = () => {
     );
   }
 
+  const snapshots = backupUtils.get_auto_backups();
+
   // Show main app
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-4">
@@ -144,7 +154,21 @@ const App = () => {
             masterPassword={masterPassword}
             onImport={importPasswords}
             onToast={showToast}
+            onToggleSettings={() => setShowSettings(prev => !prev)}
+            settingsOpen={showSettings}
           />
+
+          {showSettings && (
+            <SettingsPanel
+              settings={settings}
+              onUpdate={updateSetting}
+              snapshots={snapshots}
+              masterPassword={masterPassword}
+              onRestoreSnapshot={handleRestoreSnapshot}
+              onToast={showToast}
+              onClose={() => setShowSettings(false)}
+            />
+          )}
 
           {showForm && (
             <AddPasswordForm

@@ -1,8 +1,8 @@
 import React, { useRef, useState } from 'react';
-import { Plus, Lock, Shield, Search, Upload, Download } from 'lucide-react';
+import { Plus, Lock, Shield, Search, Upload, Download, Settings } from 'lucide-react';
 import backupUtils from '../utils/backup';
 
-const Header = ({ passwordCount, onLock, onAddNew, onAudit, passwords, masterPassword, onImport, onToast }) => {
+const Header = ({ passwordCount, onLock, onAddNew, onAudit, passwords, masterPassword, onImport, onToast, onToggleSettings, settingsOpen }) => {
   const fileInputRef = useRef(null);
   const [importError, setImportError] = useState('');
 
@@ -13,9 +13,6 @@ const Header = ({ passwordCount, onLock, onAddNew, onAudit, passwords, masterPas
     }
     try {
       const data = await backupUtils.export_vault(passwords, masterPassword);
-
-      // The async gap between the user gesture and this point means browsers may
-      // suppress a.click() — using dispatchEvent with MouseEvent is more reliable.
       const blob = new Blob([data], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const filename = `vault-backup-${new Date().toISOString().slice(0, 10)}.json`;
@@ -27,7 +24,6 @@ const Header = ({ passwordCount, onLock, onAddNew, onAudit, passwords, masterPas
       a.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
       document.body.removeChild(a);
       setTimeout(() => URL.revokeObjectURL(url), 1000);
-
       onToast('Vault exported successfully', 'success');
     } catch (err) {
       console.error('[Export error]', err);
@@ -44,7 +40,6 @@ const Header = ({ passwordCount, onLock, onAddNew, onAudit, passwords, masterPas
     setImportError('');
     const file = e.target.files[0];
     if (!file) return;
-    // Reset input so the same file can be re-selected if needed
     e.target.value = '';
 
     try {
@@ -67,8 +62,8 @@ const Header = ({ passwordCount, onLock, onAddNew, onAudit, passwords, masterPas
   };
 
   return (
-    <div className="p-6 border-b border-slate-700">
-      <div className="flex items-center justify-between">
+    <div className="border-b border-slate-700">
+      <div className="p-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
             <Shield className="w-6 h-6 text-white" />
@@ -109,7 +104,6 @@ const Header = ({ passwordCount, onLock, onAddNew, onAudit, passwords, masterPas
             <span className="hidden sm:inline">Import</span>
           </button>
 
-          {/* Hidden file input — triggered by the Import button above */}
           <input
             ref={fileInputRef}
             type="file"
@@ -133,12 +127,24 @@ const Header = ({ passwordCount, onLock, onAddNew, onAudit, passwords, masterPas
             <Lock className="w-5 h-5" />
             <span className="hidden sm:inline">Lock</span>
           </button>
+
+          <button
+            onClick={onToggleSettings}
+            className={`px-4 py-2 rounded-lg transition-colors flex items-center gap-2 ${
+              settingsOpen
+                ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                : 'bg-slate-700 hover:bg-slate-600 text-white'
+            }`}
+            title="Settings"
+            aria-pressed={settingsOpen}
+          >
+            <Settings className="w-5 h-5" />
+          </button>
         </div>
       </div>
 
-      {/* Inline import error — shown beneath the header row */}
       {importError && (
-        <div className="mt-3 flex items-center gap-2 text-sm text-red-400 bg-red-950/40 border border-red-800/50 rounded-lg px-4 py-2">
+        <div className="mx-6 mb-4 flex items-center gap-2 text-sm text-red-400 bg-red-950/40 border border-red-800/50 rounded-lg px-4 py-2">
           <span className="shrink-0">⚠</span>
           <span>{importError}</span>
           <button
