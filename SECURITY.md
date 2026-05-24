@@ -59,7 +59,6 @@ Plaintext Data → AES-256-GCM Encryption → Encrypted Data
 
 - **Keyloggers**: Malware that captures keystrokes can intercept the master password
 - **Screen capture malware**: Visible passwords can be captured
-- **XSS attacks**: Malicious scripts injected into the page can access decrypted data in memory
 - **Compromised browser**: Browser extensions or malware with browser access
 - **Physical access**: Someone with access to your unlocked device
 - **Memory dumps**: Passwords exist in plaintext in memory while vault is unlocked
