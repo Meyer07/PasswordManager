@@ -237,11 +237,11 @@ I will respond within 48 hours and work on a fix.
 ## Future Security Enhancements
 
 Planned improvements:
-- [ ] Auto-lock after inactivity
+- [✅] Auto-lock after inactivity
 - [ ] Biometric authentication (WebAuthn)
-- [ ] Encrypted export/import
+- [✅] Encrypted export/import
 - [✅] Password breach checking (HaveIBeenPwned API)
-- [ ] Session timeout
+- [✅] Session timeout
 - [ ] Clipboard auto-clear
 - [ ] Password history
 - [✅] Two-factor authentication
@@ -259,5 +259,5 @@ This security documentation is part of the Password Manager project and is provi
 
 ---
 
-**Last Updated**: February 2026  
+**Last Updated**: May 2026  
 **Version**: 1.0.0
