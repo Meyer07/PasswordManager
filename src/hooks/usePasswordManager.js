@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import encryptionUtils from '../utils/encryption';
 import validation from '../utils/validation';
 import storageService from '../services/storage';
+import backupUtils from '../utils/backup';
 
 const usePasswordManager = (masterPassword) => {
   const [passwords, setPasswords] = useState([]);
@@ -76,7 +77,14 @@ const usePasswordManager = (masterPassword) => {
     );
   };
 
-  return { passwords, isLoading, addPassword, deletePassword, updatePassword };
+  const importPasswords=async(incomingPasswords)=>
+  {
+    const { merged, added, skipped } = backupUtils.merge_vaults(passwords, incomingPasswords);
+    const success = await savePasswords(merged);
+    return { success, added, skipped };
+  }
+
+  return { passwords, isLoading, addPassword, deletePassword, updatePassword,importPasswords };
 };
 
 export default usePasswordManager;

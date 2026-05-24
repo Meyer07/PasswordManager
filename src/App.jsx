@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import useAuth from './hooks/useAuth';
 import usePasswordManager from './hooks/usePasswordManager';
 import { useAutoLock } from './hooks/useAutoLock';
@@ -10,6 +10,7 @@ import Header from './components/Header';
 import AddPasswordForm from './components/AddPasswordForm';
 import PasswordList from './components/PasswordList';
 import VaultAudit from './components/VaultAudit';
+import Toast from './components/Toast';
 
 const App = () => {
   const { 
@@ -29,13 +30,27 @@ const App = () => {
     cancelRecovery
   } = useAuth();
   
-  const { passwords, isLoading: vaultLoading, addPassword, deletePassword, updatePassword } = usePasswordManager(masterPassword);
-  useAutoLock(isUnlocked,lock,0.5);
+  const { 
+    passwords, 
+    isLoading: vaultLoading, 
+    addPassword, 
+    deletePassword, 
+    updatePassword,
+    importPasswords,
+  } = usePasswordManager(masterPassword);
+
+  useAutoLock(isUnlocked, lock, 0.5);
+
   const [showForm, setShowForm] = useState(false);
   const [formError, setFormError] = useState('');
   const [formLoading, setFormLoading] = useState(false);
-  const [recoveryState, setRecoveryState] = useState(null); // For storing recovered hash
+  const [recoveryState, setRecoveryState] = useState(null);
   const [showAudit, setShowAudit] = useState(false);
+  const [toast, setToast] = useState(null); // { message: string, type: 'success' | 'error' }
+
+  const showToast = useCallback((message, type = 'success') => {
+    setToast({ message, type });
+  }, []);
 
   const handleAddPassword = async (entry) => {
     setFormLoading(true);
@@ -55,9 +70,10 @@ const App = () => {
 
   const handleLock = () => {
     lock();
-    setShowForm(false); 
-    setShowAudit(false); 
-    setFormError(''); 
+    setShowForm(false);
+    setShowAudit(false);
+    setFormError('');
+    setToast(null);
   };
 
   const handleRecover = async (userRecoveryKey) => {
@@ -124,6 +140,10 @@ const App = () => {
             onLock={handleLock}
             onAddNew={() => setShowForm(!showForm)}
             onAudit={() => setShowAudit(true)}
+            passwords={passwords}
+            masterPassword={masterPassword}
+            onImport={importPasswords}
+            onToast={showToast}
           />
 
           {showForm && (
@@ -153,6 +173,14 @@ const App = () => {
         <VaultAudit
           passwords={passwords}
           onClose={() => setShowAudit(false)}
+        />
+      )}
+
+      {toast && (
+        <Toast
+          message={toast.message}
+          type={toast.type}
+          onDismiss={() => setToast(null)}
         />
       )}
     </div>
