@@ -9,8 +9,15 @@ export default defineConfig({
     rollupOptions: {
       output: {
         // Segregates third-party script chunks from your core application logic
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'lucide-react', 'qrcode'],
+        manualChunks(id)
+        {
+          if(id.includes('node_modules/react') ||
+          id.includes('node_modules/react-dom')||
+          id.includes('node_modules/lucide-react')||
+          id.includes('node_modules/qrcode'))
+          {
+            return 'vender';
+          }
         },
       },
     },
