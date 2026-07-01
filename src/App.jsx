@@ -4,6 +4,7 @@ import usePasswordManager from './hooks/usePasswordManager';
 import { useAutoLock } from './hooks/useAutoLock';
 import useSettings from './hooks/useSettings';
 import LoginScreen from './components/LoginScreen';
+import PrivacyPolicy from './components/PrivacyPolicy';
 import RecoveryScreen from './components/RecoveryScreen';
 import RecoveryKeyDisplay from './components/RecoveryKeyDisplay';
 import NewMasterPasswordScreen from './components/NewMasterPasswordScreen';
@@ -54,6 +55,7 @@ const App = () => {
   const [showAudit, setShowAudit] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [toast, setToast] = useState(null);
+  const [showPrivacyPolicy,setShowPrivacyPolicy]=useState(false);
 
   const showToast = useCallback((message, type = 'success') => {
     setToast({ message, type });
@@ -98,6 +100,11 @@ const App = () => {
     await savePasswords(restoredPasswords);
   };
 
+  if(showPrivacyPolicy)
+  {
+    return <PrivacyPolicy onBack={()=>setShowPrivacyPolicy(false)}/>;
+  };
+
   // Show recovery key setup modal
   if (showRecoverySetup && recoveryKey) {
     return <RecoveryKeyDisplay recoveryKey={recoveryKey} onConfirm={confirmRecoverySetup} />;
@@ -134,6 +141,7 @@ const App = () => {
         error={error}
         isLoading={authLoading}
         onShowRecovery={initiateRecovery}
+        onShowPrivacyPolicy={()=>setShowPrivacyPolicy(true)}
       />
     );
   }

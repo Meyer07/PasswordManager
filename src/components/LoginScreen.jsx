@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { Lock, Shield, AlertCircle, Loader2 } from 'lucide-react';
 
-const LoginScreen = ({ onUnlock, error, isLoading, onShowRecovery }) => {
+const LoginScreen = ({ onUnlock, error, isLoading, onShowRecovery, onShowPrivacyPolicy }) => 
+{ 
   const [password, setPassword] = useState('');
 
-  const handleSubmit = async () => {
+  const handleSubmit = async () => 
+  {
     await onUnlock(password);
   };
 
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !isLoading) {
+  const handleKeyPress = (e) => 
+  {
+    if (e.key === 'Enter' && !isLoading) 
+    {
       handleSubmit();
     }
   };
@@ -82,6 +86,14 @@ const LoginScreen = ({ onUnlock, error, isLoading, onShowRecovery }) => {
               className="w-full text-slate-400 hover:text-white text-sm transition-colors"
             >
               Forgot your master password? Use recovery key →
+            </button>
+          </div>
+          <div className="text-center">
+            <button
+              onClick={onShowPrivacyPolicy}
+              className="text-slate-500 hover:text-slate-300 text-xs transition-colors underline"
+            >
+              Privacy Policy
             </button>
           </div>
         </div>
